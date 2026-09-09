@@ -1,5 +1,5 @@
 import streamlit as st
-from openai import OpenAI
+from groq import Groq
 
 # ---------- CONFIG ----------
 st.set_page_config(page_title="AI Workflow Generator", page_icon="🚀", layout="wide")
@@ -13,7 +13,7 @@ st.markdown("""
 # ---------- SIDEBAR ----------
 st.sidebar.header("⚙️ Settings")
 
-api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
+api_key = st.sidebar.text_input("Enter Groq API Key", type="password")
 
 industry = st.sidebar.selectbox(
     "Select Industry",
@@ -37,7 +37,7 @@ generate = st.button("✨ Generate Workflow")
 
 # ---------- FUNCTION ----------
 def generate_workflow(prompt):
-    client = OpenAI(api_key=api_key)
+    client = Groq(api_key=api_key)
 
     full_prompt = f"""
     You are an expert AI business consultant.
@@ -59,7 +59,7 @@ def generate_workflow(prompt):
     """
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="llama3-70b-8192",
         messages=[{"role": "user", "content": full_prompt}],
         temperature=0.7
     )
@@ -69,7 +69,7 @@ def generate_workflow(prompt):
 # ---------- OUTPUT ----------
 if generate:
     if not api_key:
-        st.error("❌ Please enter your OpenAI API Key")
+        st.error("❌ Please enter your Groq API Key")
     elif not user_input.strip():
         st.warning("⚠️ Please enter your goal/problem")
     else:
